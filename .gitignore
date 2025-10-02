@@ -10,6 +10,7 @@
 
 # Output of the go coverage tool
 *.out
+coverage.html
 
 # Go workspace file
 go.work
@@ -21,6 +22,7 @@ vendor/
 /bin/
 /dist/
 /build/
+pact-kafka-plugin
 
 # IDE specific files
 .idea/
