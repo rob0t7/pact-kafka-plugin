@@ -1,0 +1,40 @@
+{
+  "consumer": {
+    "name": "Consumer"
+  },
+  "interactions": [
+    {
+      "contents": {
+        "content": "MDAwMTBIOTRhZjcxN2QtMWIwNC00ZmFkLTk4NzktMDFkYzgyOGU0MTBkCEphbmUGRG9lKGphbmUuZG9lQGV4YW1wbGUuY29t",
+        "contentType": "application/vnd.kafka.avro.v2",
+        "contentTypeHint": "DEFAULT",
+        "encoded": "base64"
+      },
+      "description": "a schema registery enabled Kafka message encoded with AVRO",
+      "pending": false,
+      "type": "Asynchronous/Messages"
+    }
+  ],
+  "metadata": {
+    "pact-go": {
+      "version": "2.4.1"
+    },
+    "pactRust": {
+      "ffi": "0.4.27",
+      "models": "1.2.8"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    },
+    "plugins": [
+      {
+        "configuration": {},
+        "name": "kafka",
+        "version": "0.0.1"
+      }
+    ]
+  },
+  "provider": {
+    "name": "Provider"
+  }
+}

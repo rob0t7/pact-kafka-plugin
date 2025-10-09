@@ -23,6 +23,7 @@ vendor/
 /dist/
 /build/
 pact-kafka-plugin
+kafkaplugin
 
 # IDE specific files
 .idea/
@@ -34,3 +35,4 @@ pact-kafka-plugin
 # OS specific files
 .DS_Store
 Thumbs.db
+
