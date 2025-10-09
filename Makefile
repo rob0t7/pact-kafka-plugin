@@ -1,11 +1,18 @@
 .PHONY: install-tools
 install-tools:
+	@echo "Install local development tools"
 	go install gotest.tools/gotestsum@latest
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	go install github.com/hamba/avro/v2/cmd/avrosv@latest
+	go install github.com/hamba/avro/v2/cmd/avrogen@latest
+
+.PHONY: avrogen
+avrogen: install-tools
+	avrogen -pkg test -o test/avro_gen.go -tags json:camel,yaml:camel test/schema.avsc
 
 .PHONY: build
 build:
-	go build -o pact-kafka-plugin .
+	go build -o build/kafkaplugin
 
 .PHONY: proto
 proto:
@@ -25,3 +32,11 @@ test-coverage:
 .PHONY: lint
 lint:
 	golangci-lint run
+
+.PHONY: install_local
+install_local: build
+	@echo "Creating a local phony plugin install in order to test locally"
+	mkdir -p ~/.pact/plugins/kafka-0.0.1/
+	mkdir -p ~/.pact/plugins/kafka-0.0.1/log
+	cp ./build/kafkaplugin ~/.pact/plugins/kafka-0.0.1/
+	cp pact-plugin.json ~/.pact/plugins/kafka-0.0.1/

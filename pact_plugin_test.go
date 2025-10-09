@@ -55,6 +55,7 @@ func getClient(t *testing.T) (pb.PactPluginClient, *grpc.ClientConn) {
 // TestInitPlugin tests the InitPlugin RPC method
 func TestInitPlugin(t *testing.T) {
 	client, conn := getClient(t)
+	// nolint:errcheck
 	defer conn.Close()
 
 	tests := []struct {
@@ -104,10 +105,9 @@ func TestInitPlugin(t *testing.T) {
 
 			expected := []*pb.CatalogueEntry{
 				{
-					Type: pb.CatalogueEntry_CONTENT_GENERATOR,
-					Key:  "kafka",
+					Key: "kafka",
 					Values: map[string]string{
-						"content-types": "application/vnd.kafka.avro.v1+json",
+						"content-types": "application/vnd.kafka.avro.v2",
 					},
 				},
 			}
@@ -122,6 +122,7 @@ func TestInitPlugin(t *testing.T) {
 // TestUpdateCatalogue tests the UpdateCatalogue RPC method
 func TestUpdateCatalogue(t *testing.T) {
 	client, conn := getClient(t)
+	// nolint:errcheck
 	defer conn.Close()
 
 	tests := []struct {
@@ -188,4 +189,3 @@ func TestUpdateCatalogue(t *testing.T) {
 		})
 	}
 }
-

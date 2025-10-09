@@ -1,0 +1,11 @@
+{
+  "namespace": "kafkaplugin",
+  "type": "record",
+  "name": "User",
+  "fields": [
+    { "name": "id", "type": "string", "logicalType": "uuid" },
+    { "name": "firstName", "type": "string" },
+    { "name": "lastName", "type": "string" },
+    { "name": "email", "type": "string" }
+  ]
+}
