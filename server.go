@@ -15,10 +15,6 @@ import (
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
-const (
-	AVRO_SCHEMA_CONTENT_TYPE = "application/vnd.kafka.avro.v2"
-)
-
 type pactPluginServer struct {
 	pb.UnimplementedPactPluginServer
 }
@@ -75,7 +71,7 @@ func (s *pactPluginServer) InitPlugin(ctx context.Context, req *pb.InitPluginReq
 		Catalogue: []*pb.CatalogueEntry{
 			{
 				Type: pb.CatalogueEntry_CONTENT_MATCHER,
-				Key:  "kafka",
+				Key:  PLUGIN_NAME,
 				Values: map[string]string{
 					"content-types": AVRO_SCHEMA_CONTENT_TYPE,
 				},
@@ -112,7 +108,10 @@ func (s *pactPluginServer) ConfigureInteraction(ctx context.Context, req *pb.Con
 	if !ok {
 		return nil, fmt.Errorf("message field must be a string")
 	}
-	message, _ := base64.StdEncoding.DecodeString(base64EncodedMessage.GetStringValue()) // TODO: Error handling
+	message, err := base64.StdEncoding.DecodeString(base64EncodedMessage.GetStringValue())
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode base64 message: %w", err)
+	}
 
 	content := fmt.Sprintf("%X%04X%s", 0, int64(schemaID.GetNumberValue()), message)
 	var interactions = make([]*pb.InteractionResponse, 0)

@@ -29,6 +29,11 @@
     "plugins": [
       {
         "configuration": {},
+        "name": "kafkaplugin",
+        "version": "0.0.1"
+      },
+      {
+        "configuration": {},
         "name": "kafka",
         "version": "0.0.1"
       }

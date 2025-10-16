@@ -3,6 +3,7 @@ package consumertest
 import (
 	"encoding/base64"
 	"fmt"
+	"os"
 	"strconv"
 	"testing"
 
@@ -14,7 +15,16 @@ import (
 
 const (
 	AVRO_SCHEMA_CONTENT_TYPE = "application/vnd.kafka.avro.v2"
+	PLUGIN_NAME              = "kafkaplugin"
 )
+
+var PLUGIN_VERSION string = "0.0.1"
+
+func init() {
+	if version, ok := os.LookupEnv("VERSION"); ok {
+		PLUGIN_VERSION = version
+	}
+}
 
 func TestConsumer(t *testing.T) {
 	schemaID := int64(16)
@@ -49,8 +59,8 @@ func TestConsumer(t *testing.T) {
 		AddAsynchronousMessage().
 		ExpectsToReceive("a schema registery enabled Kafka message encoded with AVRO").
 		UsingPlugin(message.PluginConfig{
-			Plugin:  "kafka",
-			Version: "0.0.1",
+			Plugin:  PLUGIN_NAME,
+			Version: PLUGIN_VERSION,
 		}).
 		WithContents(
 			fmt.Sprintf(`{"schemaId": %d, "message": "%s"}`, schemaID, base64.StdEncoding.EncodeToString(data)),

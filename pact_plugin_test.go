@@ -105,9 +105,9 @@ func TestInitPlugin(t *testing.T) {
 
 			expected := []*pb.CatalogueEntry{
 				{
-					Key: "kafka",
+					Key: PLUGIN_NAME,
 					Values: map[string]string{
-						"content-types": "application/vnd.kafka.avro.v2",
+						"content-types": AVRO_SCHEMA_CONTENT_TYPE,
 					},
 				},
 			}
@@ -136,7 +136,6 @@ func TestUpdateCatalogue(t *testing.T) {
 				Catalogue: []*pb.CatalogueEntry{
 					{
 						Type: pb.CatalogueEntry_TRANSPORT,
-						Key:  "kafka",
 						Values: map[string]string{
 							"content-types": "application/json",
 						},
@@ -158,7 +157,6 @@ func TestUpdateCatalogue(t *testing.T) {
 					},
 					{
 						Type: pb.CatalogueEntry_TRANSPORT,
-						Key:  "kafka",
 						Values: map[string]string{
 							"content-types": "application/octet-stream",
 						},
