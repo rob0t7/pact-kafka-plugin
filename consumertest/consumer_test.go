@@ -15,10 +15,10 @@ import (
 
 const (
 	AVRO_SCHEMA_CONTENT_TYPE = "application/vnd.kafka.avro.v2"
-	PLUGIN_NAME              = "kafkaplugin"
+	PLUGIN_NAME              = "kafka"
 )
 
-var PLUGIN_VERSION string = "0.0.1"
+var PLUGIN_VERSION string = "0.1.0"
 
 func init() {
 	if version, ok := os.LookupEnv("VERSION"); ok {

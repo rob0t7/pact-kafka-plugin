@@ -1,12 +1,11 @@
 {
   "pluginInterfaceVersion": 1,
-  "name": "kafkaplugin",
-  "version": "0.0.1",
+  "name": "kafka",
+  "version": "0.1.0",
   "executableType": "exec",
   "minimumRequiredVersion": null,
-  "entryPoint": "kafkaplugin",
   "entryPoints": {},
   "dependencies": null,
   "pluginConfig": {},
-  "entrypoint": "kafkaplugin"
+  "entryPoint": "kafka"
 }

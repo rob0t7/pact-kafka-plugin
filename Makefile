@@ -1,5 +1,5 @@
-VERSION?=0.0.1
-PROJECT=kafkaplugin
+VERSION?=0.1.0
+PROJECT=kafka
 .DEFAULT_GOAL := ci
 
 ci:: install-tools clean build lint test
@@ -41,12 +41,12 @@ lint:
 install_local: build write_config
 	@echo "Creating a local phony plugin install in order to test locally"
 	mkdir -p ~/.pact/plugins/$(PROJECT)-$(VERSION)/
-	cp ./build/kafkaplugin ~/.pact/plugins/$(PROJECT)-$(VERSION)/
+	cp ./build/$(PROJECT) ~/.pact/plugins/$(PROJECT)-$(VERSION)/
 	cp pact-plugin.json ~/.pact/plugins/$(PROJECT)-$(VERSION)/
 
 write_config:
 	@cp pact-plugin.json pact-plugin.json.new
-	@cat pact-plugin.json | jq '.version = "'$(subst v,,$(VERSION))'" | .name = "'$(PROJECT)'" | .entrypoint = "'$(PROJECT)'"' | tee pact-plugin.json.new
+	@cat pact-plugin.json | jq '.version = "'$(subst v,,$(VERSION))'" | .name = "'$(PROJECT)'" | .entryPoint = "'$(PROJECT)'"' | tee pact-plugin.json.new
 	@mv pact-plugin.json.new pact-plugin.json
 
 .PHONY: build test clean write_config lint

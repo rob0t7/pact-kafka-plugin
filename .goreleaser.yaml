@@ -22,11 +22,9 @@ builds:
       - darwin
 
 archives:
-  - formats: [tar.gz]
+  - formats: [gz]
     files:
-      - LICENSE
-      - README*
-      - pact-plugin.json
+      - none*
     # this name template makes the OS and Arch compatible with the results of `uname`.
     name_template: >-
       {{ .ProjectName }}-
@@ -41,8 +39,12 @@ archives:
       - goos: windows
         formats: [zip]
 
+release:
+  extra_files:
+    - glob: ./pact-plugin.json
+
 source:
-  enabled: false
+  enabled: true
 
 changelog:
   sort: asc
