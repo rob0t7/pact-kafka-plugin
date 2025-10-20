@@ -31,21 +31,6 @@
         "configuration": {},
         "name": "kafka",
         "version": "0.1.0"
-      },
-      {
-        "configuration": {},
-        "name": "kafkaplugin",
-        "version": "0.1.0"
-      },
-      {
-        "configuration": {},
-        "name": "kafkaplugin",
-        "version": "0.0.1"
-      },
-      {
-        "configuration": {},
-        "name": "kafka",
-        "version": "0.0.1"
       }
     ]
   },

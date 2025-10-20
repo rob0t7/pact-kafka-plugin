@@ -128,3 +128,33 @@ func (s *pactPluginServer) ConfigureInteraction(ctx context.Context, req *pb.Con
 		Interaction: interactions,
 	}, nil
 }
+
+func (s *pactPluginServer) CompareContents(ctx context.Context, req *pb.CompareContentsRequest) (*pb.CompareContentsResponse, error) {
+	slog.Info("Received CompareContents request", "request", req)
+
+	expectedContentType := req.Expected.ContentType
+	actualContentType := req.Actual.ContentType
+
+	if expectedContentType != actualContentType {
+		return &pb.CompareContentsResponse{
+			TypeMismatch: &pb.ContentTypeMismatch{
+				Actual:   actualContentType,
+				Expected: expectedContentType,
+			},
+		}, nil
+	}
+
+	return &pb.CompareContentsResponse{
+		Results: map[string]*pb.ContentMismatches{
+			"$": {
+				Mismatches: []*pb.ContentMismatch{
+					{
+						Actual:   req.Actual.Content,
+						Expected: req.Expected.Content,
+						Mismatch: "The content does not match",
+					},
+				},
+			},
+		},
+	}, nil
+}

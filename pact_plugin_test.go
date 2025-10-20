@@ -11,6 +11,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/test/bufconn"
 	"google.golang.org/protobuf/testing/protocmp"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
 const bufSize = 1024 * 1024
@@ -186,4 +187,92 @@ func TestUpdateCatalogue(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestCompareContents(t *testing.T) {
+	client, conn := getClient(t)
+	// nolint:errcheck
+	defer conn.Close()
+
+	testcases := []struct {
+		name    string
+		req     *pb.CompareContentsRequest
+		resp    *pb.CompareContentsResponse
+		wantErr bool
+	}{
+		{
+			"succesful comparison",
+			&pb.CompareContentsRequest{
+				Expected: &pb.Body{
+					ContentType: "application/vnd.kafka.avro.v2",
+				},
+				Actual: &pb.Body{
+					ContentType: "application/vnd.kafka.avro.v2",
+				},
+			},
+			&pb.CompareContentsResponse{},
+			false,
+		},
+		{
+			"contentType mismatch",
+			&pb.CompareContentsRequest{
+				Expected: &pb.Body{
+					ContentType: "application/vnd.kafka.avro.v2",
+				},
+				Actual: &pb.Body{
+					ContentType: "application/json",
+				},
+			},
+			&pb.CompareContentsResponse{
+				TypeMismatch: &pb.ContentTypeMismatch{
+					Actual:   "application/json",
+					Expected: "application/vnd.kafka.avro.v2",
+				},
+			},
+			false,
+		},
+		{
+			"content does not match",
+			&pb.CompareContentsRequest{
+				Expected: &pb.Body{
+					ContentType: "application/vnd.kafka.avro.v2",
+					Content:     wrapperspb.Bytes([]byte("foo")),
+				},
+				Actual: &pb.Body{
+					ContentType: "application/vnd.kafka.avro.v2",
+					Content:     wrapperspb.Bytes([]byte("bar")),
+				},
+			},
+			&pb.CompareContentsResponse{
+				Results: map[string]*pb.ContentMismatches{
+					"": {
+						Mismatches: []*pb.ContentMismatch{
+							{
+								Actual:   wrapperspb.Bytes([]byte("bar")),
+								Expected: wrapperspb.Bytes([]byte("foo")),
+								// Description: "Content does not match",
+							},
+						},
+					},
+				},
+			},
+			false,
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			resp, err := client.CompareContents(context.Background(), tc.req)
+			if !tc.wantErr && err != nil {
+				t.Fatalf("CompareContents() returned an unexpected error = %v", err)
+			}
+			if tc.wantErr && err == nil {
+				t.Fatalf("CompareContents() expected an error but got none")
+			}
+			if diff := cmp.Diff(tc.resp, resp, protocmp.Transform()); diff != "" {
+				t.Errorf("CompareContents() response mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+
 }
